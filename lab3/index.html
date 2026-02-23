@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Quiz</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h1>JavaScript Knowledge Quiz</h1>
+
+<form id="quizForm">
+
+<div class="question">
+    <p>1. Which symbol is used for comments in JS?</p>
+    <div id="q1-options"></div>
+    <span id="q1-feedback"></span>
+</div>
+
+<div class="question">
+    <p>2. Which are valid data types? (Select all)</p>
+    <label><input type="checkbox" name="q2" value="string"> String</label>
+    <label><input type="checkbox" name="q2" value="boolean"> Boolean</label>
+    <label><input type="checkbox" name="q2" value="car"> Car</label>
+    <label><input type="checkbox" name="q2" value="number"> Number</label>
+    <span id="q2-feedback"></span>
+</div>
+
+<div class="question">
+    <p>3. What does DOM stand for?</p>
+    <label><input type="radio" name="q3" value="document"> Document Object Model</label>
+    <label><input type="radio" name="q3" value="data"> Data Object Management</label>
+    <label><input type="radio" name="q3" value="digital"> Digital Ordinance Model</label>
+    <span id="q3-feedback"></span>
+</div>
+
+<div class="question">
+    <p>4. Which method selects an element by ID?</p>
+    <select id="q4">
+        <option value="">Select</option>
+        <option value="getElementById">getElementById()</option>
+        <option value="querySelectorAll">querySelectorAll()</option>
+        <option value="getClass">getClass()</option>
+    </select>
+    <span id="q4-feedback"></span>
+</div>
+
+<div class="question">
+    <p>5. What keyword declares a variable?</p>
+    <input type="text" id="q5">
+    <span id="q5-feedback"></span>
+</div>
+
+<button type="button" id="submitBtn">Submit Quiz</button>
+
+</form>
+
+<h2 id="score"></h2>
+<h3 id="congrats"></h3>
+<h4 id="timesTaken"></h4>
+
+<script src="js/script.js"></script>
+</body>
+</html>
