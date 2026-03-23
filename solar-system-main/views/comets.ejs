@@ -1,0 +1,75 @@
+<%- include('partials/head', { title: 'Comets' }) %>
+<%- include('partials/navbar') %>
+
+<div class="page-wrapper">
+    <h1 class="page-title">🌠 Comets</h1>
+    <p class="page-subtitle">Icy bodies that release gases and dust, creating spectacular tails visible from Earth.</p>
+
+    <% if (data) { %>
+        <% if (typeof data === 'object' && !Array.isArray(data)) { %>
+            <div class="two-col" style="margin-top:1.5rem;">
+                <div>
+                    <% if (data.image) { %>
+                        <img src="<%= data.image %>" alt="Comet" class="planet-img">
+                    <% } else { %>
+                        <div style="font-size:8rem;text-align:center;padding:2rem;">🌠</div>
+                    <% } %>
+                </div>
+                <div class="info-card">
+                    <h2><%= data.name || 'Comets' %></h2>
+                    <% if (data.description) { %>
+                        <p class="pod-explanation"><%= data.description %></p>
+                    <% } %>
+                    <% Object.keys(data).forEach(k => { %>
+                        <% if (k !== 'name' && k !== 'description' && k !== 'image') { %>
+                            <div class="info-row">
+                                <span class="info-label" style="text-transform:capitalize;"><%= k %></span>
+                                <span class="info-value"><%= data[k] %></span>
+                            </div>
+                        <% } %>
+                    <% }); %>
+                </div>
+            </div>
+        <% } else if (Array.isArray(data)) { %>
+            <div class="facts-grid">
+                <% data.forEach(item => { %>
+                    <div class="fact-card">
+                        <h3><%= item.name || 'Comet' %></h3>
+                        <% Object.keys(item).forEach(k => { %>
+                            <% if (k !== 'name') { %>
+                                <p><strong style="color:#7788bb;"><%= k %>:</strong> <%= item[k] %></p>
+                            <% } %>
+                        <% }); %>
+                    </div>
+                <% }); %>
+            </div>
+        <% } %>
+    <% } else { %>
+        <div class="two-col" style="margin-top:1.5rem;">
+            <div style="font-size:8rem;text-align:center;padding:3rem 0;">🌠</div>
+            <div class="info-card">
+                <h2>About Comets</h2>
+                <p class="pod-explanation">
+                    Comets are icy small Solar System bodies that, when passing close to the Sun,
+                    warm up and begin to release gases — a process called outgassing. This produces
+                    a visible atmosphere or coma, and sometimes also a tail, both from gas and dust.
+                </p>
+                <div class="info-row"><span class="info-label">Composition</span><span class="info-value">Ice, dust &amp; rocky material</span></div>
+                <div class="info-row"><span class="info-label">Origin</span><span class="info-value">Oort Cloud &amp; Kuiper Belt</span></div>
+                <div class="info-row"><span class="info-label">Nucleus size</span><span class="info-value">100 m – 40 km</span></div>
+                <div class="info-row"><span class="info-label">Tail length</span><span class="info-value">Up to 1 AU (150M km)</span></div>
+                <div class="info-row"><span class="info-label">Known comets</span><span class="info-value">&gt; 3,800</span></div>
+            </div>
+        </div>
+
+        <h2 style="color:#a0c4ff;margin-top:2.5rem;margin-bottom:1rem;">Famous Comets</h2>
+        <div class="facts-grid">
+            <div class="fact-card"><h3>Halley's Comet</h3><p>The most famous periodic comet. Visible from Earth every 75–76 years. Last seen in 1986; next expected in 2061.</p></div>
+            <div class="fact-card"><h3>Comet Hale–Bopp</h3><p>One of the brightest comets of the 20th century, visible to the naked eye for a record 18 months in 1996–1997.</p></div>
+            <div class="fact-card"><h3>Comet 67P</h3><p>Short-period comet visited by ESA's Rosetta spacecraft in 2014. The Philae lander made the first soft landing on a comet nucleus.</p></div>
+            <div class="fact-card"><h3>Comet NEOWISE</h3><p>Discovered in 2020, it was one of the brightest comets visible from the Northern Hemisphere in decades, with a striking dual tail.</p></div>
+        </div>
+    <% } %>
+</div>
+
+<%- include('partials/footer') %>

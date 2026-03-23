@@ -1,0 +1,29 @@
+<%- include('partials/head', { title: 'NASA Picture of the Day' }) %>
+<%- include('partials/navbar') %>
+
+<div class="page-wrapper">
+    <h1 class="page-title">🔭 NASA Picture of the Day</h1>
+    <p class="page-subtitle"><%= pod.date %> &mdash; <em><%= pod.title %></em></p>
+
+    <div class="pod-two-col">
+        <div>
+            <% if (pod.media_type === 'image') { %>
+                <img src="<%= pod.hdurl || pod.url %>" alt="<%= pod.title %>" class="pod-img">
+            <% } else if (pod.media_type === 'video') { %>
+                <iframe class="pod-iframe" src="<%= pod.url %>" frameborder="0" allowfullscreen></iframe>
+            <% } %>
+        </div>
+
+        <div class="info-card">
+            <h2><%= pod.title %></h2>
+            <p class="pod-explanation"><%= pod.explanation %></p>
+            <% if (pod.copyright) { %>
+                <p style="margin-top:1rem;color:#7788bb;font-size:0.85rem;">
+                    &copy; <%= pod.copyright.trim() %>
+                </p>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

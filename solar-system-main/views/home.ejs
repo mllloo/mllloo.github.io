@@ -1,0 +1,26 @@
+<%- include('partials/head', { title: 'Home' }) %>
+<%- include('partials/navbar') %>
+
+<div class="page-wrapper">
+    <h1 class="page-title">☀️ Solar System Explorer</h1>
+    <p class="page-subtitle">Discover the planets, asteroids, comets, and daily wonders of our solar system.</p>
+
+    <% if (image) { %>
+        <div class="hero-image-wrapper">
+            <img src="<%= image.largeImageURL %>" alt="<%= image.tags %>">
+            <div class="hero-caption">📷 Photo by <%= image.user %> on Pixabay</div>
+        </div>
+    <% } else { %>
+        <div class="description-block" style="margin-top:1.5rem;">
+            Unable to load a random space image right now. Try refreshing the page!
+        </div>
+    <% } %>
+
+    <p class="home-intro" style="margin-top:2rem;">
+        Our solar system is a vast and wondrous place from the scorched surface of Mercury
+        to the icy reaches beyond Neptune. Use the navgation above to explore each planet,
+        learn about asteroids and comets, or check out NASA's Astronomy Picture of the Day.
+    </p>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,59 @@
+<%- include('partials/head', { title: planet.name }) %>
+<%- include('partials/navbar') %>
+
+<div class="page-wrapper">
+    <h1 class="page-title">🪐 <%= planet.name %></h1>
+
+    <% if (planet.description) { %>
+        <div class="description-block"><%= planet.description %></div>
+    <% } %>
+
+    <div class="two-col">
+        <div>
+            <% if (planet.image) { %>
+                <img src="<%= planet.image %>" alt="<%= planet.name %>" class="planet-img">
+            <% } else { %>
+                <div class="info-card" style="text-align:center;padding:3rem;">
+                    <span style="font-size:5rem;">🪐</span>
+                    <p style="margin-top:1rem;color:#7788bb;">No image available</p>
+                </div>
+            <% } %>
+        </div>
+
+        <div class="info-card">
+            <h2>Planet Data</h2>
+            <% const fields = [
+                { label: 'Mass',              key: 'mass' },
+                { label: 'Volume',            key: 'volume' },
+                { label: 'Density',           key: 'density' },
+                { label: 'Gravity',           key: 'gravity' },
+                { label: 'Escape Velocity',   key: 'escape' },
+                { label: 'Rotation Period',   key: 'rotation' },
+                { label: 'Orbital Period',    key: 'orbit' },
+                { label: 'Moons',             key: 'moons' },
+                { label: 'Surface Temp',      key: 'temp' },
+                { label: 'Atmosphere',        key: 'atmosphere' },
+                { label: 'Distance from Sun', key: 'distance' },
+            ]; %>
+            <% fields.forEach(f => { %>
+                <% if (planet[f.key] !== undefined && planet[f.key] !== null && planet[f.key] !== '') { %>
+                    <div class="info-row">
+                        <span class="info-label"><%= f.label %></span>
+                        <span class="info-value"><%= planet[f.key] %></span>
+                    </div>
+                <% } %>
+            <% }); %>
+            <% const knownKeys = ['name','description','image','mass','volume','density','gravity','escape','rotation','orbit','moons','temp','atmosphere','distance']; %>
+            <% Object.keys(planet).forEach(k => { %>
+                <% if (!knownKeys.includes(k)) { %>
+                    <div class="info-row">
+                        <span class="info-label" style="text-transform:capitalize;"><%= k %></span>
+                        <span class="info-value"><%= planet[k] %></span>
+                    </div>
+                <% } %>
+            <% }); %>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
