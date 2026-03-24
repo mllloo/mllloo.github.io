@@ -6,21 +6,20 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
+app.set('views', join(__dirname, 'views'));
 app.use(express.static(join(__dirname, 'public')));
 
 const planets = [
-    'mercury', 'venus', 'earth', 'mars',
-    'jupiter', 'saturn', 'uranus', 'neptune'
+    'mercury','venus','earth','mars',
+    'jupiter','saturn','uranus','neptune'
 ];
 
 app.get('/', async (req, res) => {
     try {
-        const response = await fetch(
-            `https://images-api.nasa.gov/search?q=solar+system&media_type=image&page_size=20`
-        );
+        const response = await fetch('https://images-api.nasa.gov/search?q=solar+system&media_type=image&page_size=20');
         const data = await response.json();
         const items = data.collection.items;
         const random = items[Math.floor(Math.random() * items.length)];
@@ -30,7 +29,7 @@ app.get('/', async (req, res) => {
             user: 'NASA'
         };
         res.render('home', { image });
-    } catch (error) {
+    } catch {
         res.render('home', { image: null });
     }
 });
@@ -56,7 +55,7 @@ app.get('/asteroids', async (req, res) => {
                 ? planetsModule.getAsteroids()
                 : null;
         res.render('asteroids', { data });
-    } catch (error) {
+    } catch {
         res.render('asteroids', { data: null });
     }
 });
@@ -70,7 +69,7 @@ app.get('/comets', async (req, res) => {
                 ? planetsModule.getComet()
                 : null;
         res.render('comets', { data });
-    } catch (error) {
+    } catch {
         res.render('comets', { data: null });
     }
 });
@@ -78,16 +77,14 @@ app.get('/comets', async (req, res) => {
 app.get('/nasa-pod', async (req, res) => {
     try {
         const apiKey = 'DEMO_KEY';
-        const response = await fetch(
-            `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`
-        );
+        const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}`);
         const data = await response.json();
         res.render('nasa-pod', { pod: data });
-    } catch (error) {
+    } catch {
         res.status(500).send('Error fetching NASA POD');
     }
 });
 
 app.listen(port, () => {
-    console.log(`Solar System app listening at http://localhost:${port}`);
+    console.log(`running on ${port}`);
 });
