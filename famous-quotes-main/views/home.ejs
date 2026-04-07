@@ -1,0 +1,21 @@
+<%- include('partials/header') %>
+
+<h1>Quote Finder</h1>
+
+<form action="/searchByKeyword" method="GET" class="text-center">
+  <input type="text" name="keyword" class="form-control" placeholder="Enter keyword">
+  <button class="btn btn-primary mt-2">Search by Keyword</button>
+</form>
+
+<form action="/searchByAuthor" method="GET" class="text-center">
+  <select name="authorId" class="form-select">
+    <% for (let i of authors) { %>
+      <option value="<%= i.authorId %>">
+        <%= i.firstName %> <%= i.lastName %>
+      </option>
+    <% } %>
+  </select>
+  <button class="btn btn-primary mt-2">Search by Author</button>
+</form>
+
+<%- include('partials/footer') %>

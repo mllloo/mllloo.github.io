@@ -1,0 +1,15 @@
+<%- include('partials/header') %>
+
+<h1>Famous Quotes</h1>
+
+<div class="container text-center">
+  <a href="/" class="btn btn-secondary mb-3">Home</a>
+
+  <% for (let i of rows) { %>
+    <p class="fs-5"><i><%= i.quote %></i></p>
+    <p><%= i.firstName %> <%= i.lastName %></p>
+    <hr>
+  <% } %>
+</div>
+
+<%- include('partials/footer') %>
