@@ -1,21 +1,162 @@
-<%- include('partials/header') %>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quote Finder</title>
 
-<h1>Quote Finder</h1>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      padding: 30px;
+      text-align: center;
+    }
 
-<form action="/searchByKeyword" method="GET" class="text-center">
-  <input type="text" name="keyword" class="form-control" placeholder="Enter keyword">
-  <button class="btn btn-primary mt-2">Search by Keyword</button>
-</form>
+    h1 {
+      margin-bottom: 20px;
+    }
 
-<form action="/searchByAuthor" method="GET" class="text-center">
-  <select name="authorId" class="form-select">
-    <% for (let i of authors) { %>
-      <option value="<%= i.authorId %>">
-        <%= i.firstName %> <%= i.lastName %>
-      </option>
-    <% } %>
+    a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #2f3640;
+      font-weight: bold;
+    }
+
+    form {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    input, select {
+      margin: 5px;
+      padding: 5px;
+    }
+
+    button {
+      padding: 6px 12px;
+      background: #4cd137;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #44bd32;
+    }
+
+    .quote {
+      background: white;
+      padding: 15px;
+      margin: 10px auto;
+      border-radius: 8px;
+      width: 60%;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+
+    .author {
+      color: #0097e6;
+      cursor: pointer;
+    }
+
+    #modal {
+      position: fixed;
+      top: 20%;
+      left: 35%;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      display: none;
+      width: 300px;
+    }
+
+    #modal img {
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .error {
+      color: red;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Famous Quote Finder</h1>
+
+<a href="/newQuote">Add Quote</a>
+<a href="/newAuthor">Add Author</a>
+
+<br><br>
+
+<form action="/search" method="GET">
+  Keyword:
+  <input name="keyword">
+
+  Author:
+  <input name="author">
+
+  Category:
+  <select name="category">
+    <option value="">All</option>
+    <% categories.forEach(c => { %>
+      <option value="<%= c.category %>"><%= c.category %></option>
+    <% }) %>
   </select>
-  <button class="btn btn-primary mt-2">Search by Author</button>
+
+  Likes:
+  <input type="number" name="min" placeholder="min">
+  -
+  <input type="number" name="max" placeholder="max">
+
+  <br><br>
+  <button>Search</button>
 </form>
 
-<%- include('partials/footer') %>
+<% if (error) { %>
+  <div class="error"><%= error %></div>
+<% } %>
+
+<% quotes.forEach(q => { %>
+  <div class="quote">
+    "<%= q.quote %>" <br><br>
+    — 
+    <span class="author" onclick="showAuthor(<%= q.authorId %>)">
+      <%= q.name %>
+    </span>
+    <br>
+    ❤️ <%= q.likes %>
+  </div>
+<% }) %>
+
+<div id="modal"></div>
+
+<script>
+async function showAuthor(id) {
+  let res = await fetch(`/author/${id}`);
+  let a = await res.json();
+
+  document.getElementById("modal").style.display = "block";
+  document.getElementById("modal").innerHTML = `
+    <h3>${a.firstName} ${a.lastName}</h3>
+    <img src="${a.portrait}" width="120"><br>
+    <p>${a.biography}</p>
+    <button onclick="closeModal()">Close</button>
+  `;
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+}
+</script>
+
+</body>
+</html>

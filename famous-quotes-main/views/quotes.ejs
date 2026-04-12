@@ -7,9 +7,44 @@
 
   <% for (let i of rows) { %>
     <p class="fs-5"><i><%= i.quote %></i></p>
-    <p><%= i.firstName %> <%= i.lastName %></p>
+    <p class="authorNames" authorId="<%= i.authorId %>">
+      <%= i.firstName %> <%= i.lastName %>
+    </p>
     <hr>
   <% } %>
 </div>
+
+<dialog id="authorModal">
+  <div id="authorInfo">
+    <button id="closeModal">CLOSE</button>
+    <h1 id="authorName"></h1>
+    <img id="authorPicture" width="300">
+  </div>
+</dialog>
+
+<script>
+  let authorLinks = document.querySelectorAll(".authorNames");
+  
+  for (let i of authorLinks) {
+    i.addEventListener("click", displayAuthorInfo);
+  }
+
+  document.querySelector("#closeModal").addEventListener("click", () => {
+    document.querySelector("#authorModal").close();
+  });
+
+  async function displayAuthorInfo() {
+    let authorId = this.getAttribute("authorId");
+    let url = "/api/author/" + authorId;
+    let response = await fetch(url);
+    let data = await response.json();
+
+    document.querySelector("#authorName").textContent =
+      data[0].firstName + " " + data[0].lastName;
+
+    document.querySelector("#authorPicture").src = data[0].portrait;
+    document.querySelector("#authorModal").showModal();
+  }
+</script>
 
 <%- include('partials/footer') %>

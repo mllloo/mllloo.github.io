@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Quote</title>
+</head>
+<body>
+
+<h2>Add Quote</h2>
+
+<form action="/newQuote" method="POST">
+
+Quote:
+<input name="quote"><br>
+
+Author:
+<select name="authorId">
+  <% authors.forEach(a => { %>
+    <option value="<%= a.authorId %>">
+      <%= a.firstName %> <%= a.lastName %>
+    </option>
+  <% }) %>
+</select><br>
+
+Category:
+<input name="category"><br>
+
+Likes:
+<input type="number" name="likes"><br>
+
+<button>Add Quote</button>
+
+</form>
+
+</body>
+</html>
