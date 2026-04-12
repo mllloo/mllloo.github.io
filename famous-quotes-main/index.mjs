@@ -15,11 +15,9 @@ const pool = mysql.createPool({
   connectionLimit: 10
 });
 
-app.listen(3000, () => console.log("Server running"));
-
 app.get("/", async (req, res) => {
   let [categories] = await pool.query("SELECT DISTINCT category FROM quotes");
-  res.render("home.ejs", { quotes: [], categories, error: null });
+  res.render("home", { quotes: [], categories, error: null });
 });
 
 app.get("/search", async (req, res) => {
@@ -27,7 +25,7 @@ app.get("/search", async (req, res) => {
 
   if (keyword && keyword.length < 3) {
     let [categories] = await pool.query("SELECT DISTINCT category FROM quotes");
-    return res.render("home.ejs", {
+    return res.render("home", {
       error: "Keyword must be at least 3 characters",
       quotes: [],
       categories
@@ -68,7 +66,7 @@ app.get("/search", async (req, res) => {
   let [quotes] = await pool.query(sql, params);
   let [categories] = await pool.query("SELECT DISTINCT category FROM quotes");
 
-  res.render("home.ejs", { quotes, categories, error: null });
+  res.render("home", { quotes, categories, error: null });
 });
 
 app.get("/author/:id", async (req, res) => {
@@ -80,7 +78,7 @@ app.get("/author/:id", async (req, res) => {
 });
 
 app.get("/newAuthor", (req, res) => {
-  res.render("newAuthor.ejs");
+  res.render("newAuthor");
 });
 
 app.post("/newAuthor", async (req, res) => {
@@ -96,7 +94,7 @@ app.post("/newAuthor", async (req, res) => {
 
 app.get("/newQuote", async (req, res) => {
   let [authors] = await pool.query("SELECT * FROM authors");
-  res.render("newQuote.ejs", { authors });
+  res.render("newQuote", { authors });
 });
 
 app.post("/newQuote", async (req, res) => {
@@ -109,3 +107,6 @@ app.post("/newQuote", async (req, res) => {
 
   res.redirect("/");
 });
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log("Server running"));
