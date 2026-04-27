@@ -5,13 +5,13 @@
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="/">Home</a></li>
       <li class="breadcrumb-item"><a href="/authors">Authors</a></li>
-      <li class="breadcrumb-item active">Add Author</li>
+      <li class="breadcrumb-item active">Edit Author</li>
     </ol>
   </nav>
 
   <div class="card border-0 shadow-sm rounded-3">
-    <div class="card-header bg-primary text-white py-3">
-      <h5 class="mb-0"><i class="bi bi-person-plus me-2"></i>Add New Author</h5>
+    <div class="card-header bg-warning text-dark py-3">
+      <h5 class="mb-0"><i class="bi bi-pencil me-2"></i>Edit Author</h5>
     </div>
     <div class="card-body p-4">
 
@@ -23,57 +23,62 @@
         </div>
       <% } %>
 
-      <form action="/newAuthor" method="POST">
+      <form action="/editAuthor/<%= author.authorId %>" method="POST">
         <div class="row g-3">
           <div class="col-md-6">
             <label class="form-label fw-semibold">First Name <span class="text-danger">*</span></label>
             <input type="text" name="firstName" class="form-control"
-                   value="<%= old.firstName || '' %>" required>
+                   value="<%= author.firstName %>" required>
           </div>
           <div class="col-md-6">
             <label class="form-label fw-semibold">Last Name <span class="text-danger">*</span></label>
             <input type="text" name="lastName" class="form-control"
-                   value="<%= old.lastName || '' %>" required>
+                   value="<%= author.lastName %>" required>
           </div>
           <div class="col-md-4">
             <label class="form-label fw-semibold">Sex <span class="text-danger">*</span></label>
             <div class="mt-1">
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="sex" value="M"
-                       id="sexM" <%= old.sex === 'M' ? 'checked' : '' %> required>
+                       id="sexM" <%= author.sex === 'M' ? 'checked' : '' %> required>
                 <label class="form-check-label" for="sexM">♂ Male</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="sex" value="F"
-                       id="sexF" <%= old.sex === 'F' ? 'checked' : '' %>>
+                       id="sexF" <%= author.sex === 'F' ? 'checked' : '' %>>
                 <label class="form-check-label" for="sexF">♀ Female</label>
               </div>
             </div>
           </div>
           <div class="col-md-4">
             <label class="form-label fw-semibold">Date of Birth</label>
-            <input type="date" name="dob" class="form-control" value="<%= old.dob || '' %>">
+            <input type="date" name="dob" class="form-control"
+                   value="<%= author.dob ? new Date(author.dob).toISOString().split('T')[0] : '' %>">
           </div>
           <div class="col-md-4">
             <label class="form-label fw-semibold">Date of Death</label>
-            <input type="date" name="dod" class="form-control" value="<%= old.dod || '' %>">
+            <input type="date" name="dod" class="form-control"
+                   value="<%= author.dod ? new Date(author.dod).toISOString().split('T')[0] : '' %>">
           </div>
           <div class="col-12">
             <label class="form-label fw-semibold">Biography <span class="text-danger">*</span></label>
-            <textarea name="biography" class="form-control" rows="4"
-                      placeholder="A short biography…" required><%= old.biography || '' %></textarea>
+            <textarea name="biography" class="form-control" rows="4" required><%= author.biography %></textarea>
           </div>
           <div class="col-12">
             <label class="form-label fw-semibold">Portrait URL</label>
             <input type="url" name="portrait" class="form-control"
                    placeholder="https://example.com/photo.jpg"
-                   value="<%= old.portrait || '' %>">
+                   value="<%= author.portrait || '' %>">
+            <% if (author.portrait) { %>
+              <img src="<%= author.portrait %>" class="mt-2 rounded" height="80"
+                   onerror="this.style.display='none'">
+            <% } %>
           </div>
         </div>
 
         <div class="d-flex gap-2 mt-4">
-          <button type="submit" class="btn btn-primary">
-            <i class="bi bi-check-lg me-1"></i>Save Author
+          <button type="submit" class="btn btn-warning">
+            <i class="bi bi-check-lg me-1"></i>Update Author
           </button>
           <a href="/authors" class="btn btn-outline-secondary">Cancel</a>
         </div>

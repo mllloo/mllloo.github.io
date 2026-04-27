@@ -1,0 +1,60 @@
+<%- include('partials/header') %>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height:70vh;">
+  <div class="card border-0 shadow rounded-3" style="width:380px;">
+    <div class="card-header text-white text-center py-4"
+         style="background:linear-gradient(135deg,#0d6efd,#0a4fbf); border-radius:12px 12px 0 0;">
+      <i class="bi bi-blockquote-left fs-1"></i>
+      <h4 class="mb-0 mt-2 fw-bold">Quote Finder</h4>
+      <small class="opacity-75">Administrator Login</small>
+    </div>
+    <div class="card-body p-4">
+
+      <% if (loginError) { %>
+        <div class="alert alert-danger d-flex align-items-center">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i><%= loginError %>
+        </div>
+      <% } %>
+
+      <form action="/loginProcess" method="POST">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Username</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-person"></i></span>
+            <input type="text" name="username" class="form-control"
+                   placeholder="Enter username" required autofocus>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Password</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input type="password" id="pwd" name="password" class="form-control"
+                   placeholder="Enter password" required>
+            <span class="input-group-text" style="cursor:pointer;" id="eyeToggle">
+              <i class="bi bi-eye" id="eyeIcon"></i>
+            </span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+          <i class="bi bi-box-arrow-in-right me-2"></i>Login
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('eyeToggle').addEventListener('click', () => {
+    const pwd = document.getElementById('pwd');
+    const icon = document.getElementById('eyeIcon');
+    const hidden = pwd.type === 'password';
+    pwd.type = hidden ? 'text' : 'password';
+    icon.classList.toggle('bi-eye', !hidden);
+    icon.classList.toggle('bi-eye-slash', hidden);
+  });
+</script>
+
+<%- include('partials/footer') %>

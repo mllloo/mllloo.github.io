@@ -4,13 +4,13 @@
   <nav aria-label="breadcrumb" class="mb-3">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="/">Home</a></li>
-      <li class="breadcrumb-item active">Add Quote</li>
+      <li class="breadcrumb-item active">Edit Quote</li>
     </ol>
   </nav>
 
   <div class="card border-0 shadow-sm rounded-3">
-    <div class="card-header bg-success text-white py-3">
-      <h5 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Add New Quote</h5>
+    <div class="card-header bg-warning text-dark py-3">
+      <h5 class="mb-0"><i class="bi bi-pencil me-2"></i>Edit Quote</h5>
     </div>
     <div class="card-body p-4">
 
@@ -22,11 +22,10 @@
         </div>
       <% } %>
 
-      <form action="/newQuote" method="POST">
+      <form action="/editQuote/<%= quote.quoteId %>" method="POST">
         <div class="mb-3">
           <label class="form-label fw-semibold">Quote <span class="text-danger">*</span></label>
-          <textarea name="quote" class="form-control" rows="4"
-                    placeholder="Enter the quote here…" required><%= old.quote || '' %></textarea>
+          <textarea name="quote" class="form-control" rows="4" required><%= quote.quote %></textarea>
         </div>
 
         <div class="mb-3">
@@ -34,50 +33,43 @@
           <select name="authorId" class="form-select" required>
             <option value="">— Select an author —</option>
             <% authors.forEach(a => { %>
-              <option value="<%= a.authorId %>"
-                <%= old.authorId == a.authorId ? 'selected' : '' %>>
+              <option value="<%= a.authorId %>" <%= quote.authorId == a.authorId ? 'selected' : '' %>>
                 <%= a.firstName %> <%= a.lastName %>
               </option>
             <% }) %>
           </select>
-          <% if (authors.length === 0) { %>
-            <div class="form-text text-warning">
-              <i class="bi bi-exclamation-circle me-1"></i>
-              No authors yet. <a href="/newAuthor">Add an author first</a>.
-            </div>
-          <% } %>
         </div>
 
         <div class="mb-3">
           <label class="form-label fw-semibold">Category <span class="text-danger">*</span></label>
           <%
-            const oldCat = old.category || '';
-            const existingCats = categories.map(c => c.category);
-            const isCustom = oldCat && !existingCats.includes(oldCat);
+            const currentCat  = quote.category || '';
+            const catValues   = categories.map(c => c.category);
+            const isCustom    = currentCat && !catValues.includes(currentCat);
           %>
           <select name="category" id="catSelect" class="form-select" required>
             <option value="">— Select a category —</option>
             <% categories.forEach(c => { %>
-              <option value="<%= c.category %>" <%= oldCat === c.category ? 'selected' : '' %>>
+              <option value="<%= c.category %>" <%= currentCat === c.category ? 'selected' : '' %>>
                 <%= c.category %>
               </option>
             <% }) %>
             <option value="__custom__" <%= isCustom ? 'selected' : '' %>>+ New category…</option>
           </select>
           <input type="text" id="catCustom" class="form-control mt-2 <%= isCustom ? '' : 'd-none' %>"
-                 placeholder="Enter new category"
-                 value="<%= isCustom ? oldCat : '' %>">
+                 placeholder="Enter category name"
+                 value="<%= isCustom ? currentCat : '' %>">
         </div>
 
         <div class="mb-3">
           <label class="form-label fw-semibold">Likes</label>
           <input type="number" name="likes" class="form-control" min="0"
-                 value="<%= old.likes || 0 %>" style="max-width:150px;">
+                 value="<%= quote.likes %>" style="max-width:150px;">
         </div>
 
         <div class="d-flex gap-2 mt-4">
-          <button type="submit" class="btn btn-success">
-            <i class="bi bi-check-lg me-1"></i>Save Quote
+          <button type="submit" class="btn btn-warning">
+            <i class="bi bi-check-lg me-1"></i>Update Quote
           </button>
           <a href="/" class="btn btn-outline-secondary">Cancel</a>
         </div>
@@ -99,7 +91,7 @@ function syncCat() {
   }
 }
 sel.addEventListener('change', syncCat);
-<% if (isCustom) { %>sel.value = '__custom__'; syncCat();<% } %>
+<% if (isCustom) { %>syncCat();<% } %>
 </script>
 
 <%- include('partials/footer') %>

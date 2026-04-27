@@ -1,0 +1,66 @@
+<%- include('partials/header') %>
+
+<div class="container pb-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold mb-0">Authors</h2>
+      <p class="text-muted mb-0"><%= authors.length %> total</p>
+    </div>
+    <a href="/newAuthor" class="btn btn-primary">
+      <i class="bi bi-person-plus me-2"></i>Add Author
+    </a>
+  </div>
+
+  <% if (authors.length === 0) { %>
+    <div class="alert alert-info">No authors yet. <a href="/newAuthor">Add one!</a></div>
+  <% } else { %>
+  <div class="card border-0 shadow-sm rounded-3">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Sex</th>
+            <th>Born</th>
+            <th>Died</th>
+            <th>Biography</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% authors.forEach((a, i) => { %>
+          <tr>
+            <td class="text-muted"><%= i + 1 %></td>
+            <td class="fw-semibold">
+              <a href="/authorQuotes/<%= a.authorId %>" class="text-decoration-none">
+                <%= a.firstName %> <%= a.lastName %>
+              </a>
+            </td>
+            <td><%= a.sex === 'M' ? '♂ Male' : '♀ Female' %></td>
+            <td><%= a.dob ? new Date(a.dob).getFullYear() : '—' %></td>
+            <td><%= a.dod ? new Date(a.dod).getFullYear() : '—' %></td>
+            <td class="text-muted" style="max-width:250px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              <%= a.biography %>
+            </td>
+            <td class="text-center">
+              <a href="/editAuthor/<%= a.authorId %>" class="btn btn-sm btn-outline-primary me-1">
+                <i class="bi bi-pencil"></i> Edit
+              </a>
+              <form action="/deleteAuthor/<%= a.authorId %>" method="POST" class="d-inline"
+                    onsubmit="return confirm('Delete <%= a.firstName %> <%= a.lastName %>? This will also delete their quotes.')">
+                <button class="btn btn-sm btn-outline-danger">
+                  <i class="bi bi-trash"></i> Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <% } %>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,162 +1,129 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Quote Finder</title>
+<%- include('partials/header') %>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f6fa;
-      padding: 30px;
-      text-align: center;
-    }
+<div class="container pb-5">
 
-    h1 {
-      margin-bottom: 20px;
-    }
+  <h1 class="text-center fw-bold mb-1"><i class="bi bi-blockquote-left text-primary"></i> Famous Quote Finder</h1>
+  <p class="text-center text-muted mb-4">Search, explore, and manage famous quotes</p>
 
-    a {
-      margin: 0 10px;
-      text-decoration: none;
-      color: #2f3640;
-      font-weight: bold;
-    }
-
-    form {
-      background: white;
-      padding: 15px;
-      border-radius: 8px;
-      display: inline-block;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    input, select {
-      margin: 5px;
-      padding: 5px;
-    }
-
-    button {
-      padding: 6px 12px;
-      background: #4cd137;
-      border: none;
-      color: white;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #44bd32;
-    }
-
-    .quote {
-      background: white;
-      padding: 15px;
-      margin: 10px auto;
-      border-radius: 8px;
-      width: 60%;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      text-align: left;
-    }
-
-    .author {
-      color: #0097e6;
-      cursor: pointer;
-    }
-
-    #modal {
-      position: fixed;
-      top: 20%;
-      left: 35%;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      display: none;
-      width: 300px;
-    }
-
-    #modal img {
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
-
-    .error {
-      color: red;
-      margin-bottom: 10px;
-    }
-  </style>
-</head>
-
-<body>
-
-<h1>Famous Quote Finder</h1>
-
-<a href="/newQuote">Add Quote</a>
-<a href="/newAuthor">Add Author</a>
-
-<br><br>
-
-<form action="/search" method="GET">
-  Keyword:
-  <input name="keyword">
-
-  Author:
-  <input name="author">
-
-  Category:
-  <select name="category">
-    <option value="">All</option>
-    <% categories.forEach(c => { %>
-      <option value="<%= c.category %>"><%= c.category %></option>
-    <% }) %>
-  </select>
-
-  Likes:
-  <input type="number" name="min" placeholder="min">
-  -
-  <input type="number" name="max" placeholder="max">
-
-  <br><br>
-  <button>Search</button>
-</form>
-
-<% if (error) { %>
-  <div class="error"><%= error %></div>
-<% } %>
-
-<% quotes.forEach(q => { %>
-  <div class="quote">
-    "<%= q.quote %>" <br><br>
-    — 
-    <span class="author" onclick="showAuthor(<%= q.authorId %>)">
-      <%= q.name %>
-    </span>
-    <br>
-    ❤️ <%= q.likes %>
+  <!-- Search form -->
+  <div class="card border-0 shadow-sm rounded-3 mb-4">
+    <div class="card-body p-4">
+      <form action="/search" method="GET" class="row g-3 align-items-end">
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">Keyword</label>
+          <input type="text" name="keyword" class="form-control" placeholder="Search quotes…">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">Author</label>
+          <input type="text" name="author" class="form-control" placeholder="Author name…">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Category</label>
+          <select name="category" class="form-select">
+            <option value="">All</option>
+            <% categories.forEach(c => { %>
+              <option value="<%= c.category %>"><%= c.category %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Likes range</label>
+          <div class="input-group">
+            <input type="number" name="min" class="form-control" placeholder="Min" min="0">
+            <span class="input-group-text">–</span>
+            <input type="number" name="max" class="form-control" placeholder="Max" min="0">
+          </div>
+        </div>
+        <div class="col-md-2 d-grid">
+          <button class="btn btn-primary"><i class="bi bi-search me-1"></i>Search</button>
+        </div>
+      </form>
+    </div>
   </div>
-<% }) %>
 
-<div id="modal"></div>
+  <!-- Error -->
+  <% if (error) { %>
+    <div class="alert alert-danger d-flex align-items-center">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i><%= error %>
+    </div>
+  <% } %>
+
+  <!-- Results count -->
+  <p class="text-muted mb-3"><%= quotes.length %> quote<%= quotes.length !== 1 ? 's' : '' %> found</p>
+
+  <!-- Quote cards -->
+  <% quotes.forEach(q => { %>
+  <div class="quote-card p-4 mb-3">
+    <p class="fs-5 mb-2 fst-italic">"<%= q.quote %>"</p>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div>
+        <span class="author-link" onclick="showAuthor(<%= q.authorId %>)">— <%= q.name %></span>
+        <span class="badge bg-secondary ms-2"><%= q.category %></span>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <span class="text-muted small"><i class="bi bi-heart-fill text-danger"></i> <%= q.likes %></span>
+        <a href="/editQuote/<%= q.quoteId %>" class="btn btn-sm btn-outline-primary">
+          <i class="bi bi-pencil"></i> Edit
+        </a>
+        <form action="/deleteQuote/<%= q.quoteId %>" method="POST" class="d-inline"
+              onsubmit="return confirm('Delete this quote?')">
+          <button class="btn btn-sm btn-outline-danger">
+            <i class="bi bi-trash"></i> Delete
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <% }) %>
+
+  <% if (quotes.length === 0 && !error) { %>
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-search fs-1"></i>
+      <p class="mt-2">No quotes found. Try different search terms.</p>
+    </div>
+  <% } %>
+</div>
+
+<!-- Author Modal -->
+<div class="modal fade" id="authorModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalName"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="modalImg" src="" width="150" class="mb-3 rounded" onerror="this.style.display='none'">
+        <p id="modalBio" class="text-muted text-start"></p>
+        <div id="modalMeta" class="text-muted small"></div>
+      </div>
+      <div class="modal-footer">
+        <a id="modalQuotesLink" href="#" class="btn btn-outline-primary btn-sm">
+          <i class="bi bi-chat-quote me-1"></i>View All Quotes
+        </a>
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 async function showAuthor(id) {
-  let res = await fetch(`/author/${id}`);
-  let a = await res.json();
+  const res = await fetch(`/author/${id}`);
+  const a   = await res.json();
+  const modal = new bootstrap.Modal(document.getElementById('authorModal'));
 
-  document.getElementById("modal").style.display = "block";
-  document.getElementById("modal").innerHTML = `
-    <h3>${a.firstName} ${a.lastName}</h3>
-    <img src="${a.portrait}" width="120"><br>
-    <p>${a.biography}</p>
-    <button onclick="closeModal()">Close</button>
-  `;
-}
+  document.getElementById('modalName').textContent = a.firstName + ' ' + a.lastName;
+  document.getElementById('modalBio').textContent  = a.biography || 'No biography available.';
+  document.getElementById('modalImg').src = a.portrait || '';
 
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
+  const dob = a.dob ? new Date(a.dob).getFullYear() : '?';
+  const dod = a.dod ? new Date(a.dod).getFullYear() : 'present';
+  document.getElementById('modalMeta').textContent = `${a.sex === 'M' ? '♂' : '♀'}  ${dob} – ${dod}`;
+  document.getElementById('modalQuotesLink').href  = `/authorQuotes/${id}`;
+
+  modal.show();
 }
 </script>
 
-</body>
-</html>
+<%- include('partials/footer') %>

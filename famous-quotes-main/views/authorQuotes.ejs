@@ -1,0 +1,73 @@
+<%- include('partials/header') %>
+
+<div class="container pb-5">
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item"><a href="/authors">Authors</a></li>
+      <li class="breadcrumb-item active"><%= author.firstName %> <%= author.lastName %></li>
+    </ol>
+  </nav>
+
+  <!-- Author card -->
+  <div class="card border-0 shadow-sm rounded-3 mb-4">
+    <div class="card-body p-4 d-flex gap-4 align-items-center flex-wrap">
+      <% if (author.portrait) { %>
+        <img src="<%= author.portrait %>" height="100" class="rounded" onerror="this.style.display='none'">
+      <% } else { %>
+        <div class="bg-secondary text-white rounded d-flex align-items-center justify-content-center"
+             style="width:100px;height:100px;font-size:2.5rem;">
+          <i class="bi bi-person-fill"></i>
+        </div>
+      <% } %>
+      <div>
+        <h2 class="fw-bold mb-1"><%= author.firstName %> <%= author.lastName %></h2>
+        <p class="text-muted mb-1">
+          <%= author.sex === 'M' ? '♂ Male' : '♀ Female' %>
+          <% if (author.dob) { %> &nbsp;·&nbsp; Born <%= new Date(author.dob).getFullYear() %><% } %>
+          <% if (author.dod) { %> &nbsp;·&nbsp; Died <%= new Date(author.dod).getFullYear() %><% } %>
+        </p>
+        <p class="mb-0"><%= author.biography || '' %></p>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="fw-semibold mb-3">
+    <i class="bi bi-chat-quote me-2"></i>Quotes (<%= quotes.length %>)
+  </h4>
+
+  <% if (quotes.length === 0) { %>
+    <div class="alert alert-info">No quotes yet for this author.</div>
+  <% } %>
+
+  <% quotes.forEach(q => { %>
+  <div class="quote-card p-4 mb-3">
+    <p class="fs-5 fst-italic mb-2">"<%= q.quote %>"</p>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div>
+        <span class="badge bg-secondary"><%= q.category %></span>
+        <span class="text-muted ms-2 small"><i class="bi bi-heart-fill text-danger"></i> <%= q.likes %></span>
+      </div>
+      <div class="d-flex gap-2">
+        <a href="/editQuote/<%= q.quoteId %>" class="btn btn-sm btn-outline-primary">
+          <i class="bi bi-pencil"></i> Edit
+        </a>
+        <form action="/deleteQuote/<%= q.quoteId %>" method="POST" class="d-inline"
+              onsubmit="return confirm('Delete this quote?')">
+          <button class="btn btn-sm btn-outline-danger">
+            <i class="bi bi-trash"></i> Delete
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <% }) %>
+
+  <div class="mt-3">
+    <a href="/authors" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left me-1"></i>Back to Authors
+    </a>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
