@@ -1,1 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Basic setup for the webpage -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- This title shows up on the browser tab -->
+  <title>Millonoel Rodriguez</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Nunito:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- External CSS file -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Dark/Light mode button -->
+  <button id="toggle" aria-label="Toggle theme">☀️</button>
+
+  <!-- Main content container -->
+  <div class="wrap">
+
+    <!-- Profile picture -->
+    <img class="photo" src="images/profile.jpeg" alt="Millonoel Rodriguez">
+
+    <!-- Greeting changes based on time -->
+    <p class="greeting" id="greeting">Welcome</p>
+
+    <!-- Name -->
+    <h1>Millonoel Rodriguez</h1>
+
+    <!-- About me section -->
+    <p class="bio">
+      I'm a CSUMB Software Engineering student and active Digital Nest member focused on building tech that works.
+      From volunteering at Nest Flight to designing web applications, I love being involved in my community.
+      Off the clock, I'm usually hitting the gym, playing video games, or working on my golf swing.
+    </p>
+
+    <!-- Small divider line -->
+    <div class="divider"></div>
+
+    <!-- Link cards -->
+    <nav class="links">
+
+      <!-- LinkedIn -->
+      <a class="card" href="https://www.linkedin.com/in/millonoelrodriguez" target="_blank">
+        <div class="icon">
+          <svg viewBox="0 0 24 24">
+            <rect width="24" height="24" rx="4" fill="#0A66C2"/>
+            <path d="M7.75 9.5H5.5V18H7.75V9.5ZM6.625 8.5C7.385 8.5 8 7.885 8 7.125C8 6.365 7.385 5.75 6.625 5.75C5.865 5.75 5.25 6.365 5.25 7.125C5.25 7.885 5.865 8.5 6.625 8.5ZM18.5 18H16.25V13.875C16.25 12.562 15.763 11.75 14.688 11.75C13.875 11.75 13.438 12.312 13.25 12.875C13.188 13.062 13.188 13.312 13.188 13.562V18H10.938V9.5H13.188V10.5C13.5 10 14.125 9.25 15.5 9.25C17.188 9.25 18.5 10.375 18.5 12.875V18Z" fill="white"/>
+          </svg>
+        </div>
+        <div class="info">
+          <span>LinkedIn</span>
+          <small>Professional experience and networking</small>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+
+      <!-- GitHub -->
+      <a class="card" href="https://github.com/mllloo" target="_blank">
+        <div class="info">
+          <span>GitHub</span>
+          <small>Projects, code, and repositories</small>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+
+      <!-- Resume -->
+      <a class="card" href="https://drive.google.com/file/d/1bYcbBZNOJQjvoOrDQIMycAcGd9mce2Qr/view?usp=sharing" target="_blank">
+        <div class="info">
+          <span>Résumé</span>
+          <small>Education, experience, and technical skills</small>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+
+      <!-- Email -->
+      <a class="card" href="mailto:millogotwork@gmail.com">
+        <div class="info">
+          <span>Email Me</span>
+          <small>millogotwork@gmail.com</small>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+
+    </nav>
+
+    <!-- Footer -->
+    <footer>Built with HTML, CSS, and JavaScript</footer>
+
+  </div>
+
+  <script>
+    // Get the theme button
+    const toggle = document.getElementById('toggle');
+
+    // Load saved theme from browser storage
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark');
+      toggle.textContent = '🌙';
+    }
+
+    // Change theme when button is clicked
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+
+      const dark = document.body.classList.contains('dark');
+
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+
+      toggle.textContent = dark ? '🌙' : '☀️';
+    });
+
+    // Get current hour
+    const hour = new Date().getHours();
+
+    // Get greeting element
+    const greeting = document.getElementById('greeting');
+
+    // Display different greeting based on time
+    greeting.textContent =
+      hour < 12 ? "Good morning, I'm Millonoel" :
+      hour < 18 ? "Good afternoon, I'm Millonoel" :
+      "Good evening, I'm Millonoel";
+  </script>
+
+</body>
+</html>
